@@ -1,0 +1,2 @@
+flex_SDK_base=LINK/TO/FLEX/SDK/ (example: /Users/deadlygeek/Documents/dev/flash/libs/flex_sdk)
+source_path=LINK/TO/TONE/SRC (example: /Users/deadlygeek/Documents/dev/flash/toneGenerator/src)

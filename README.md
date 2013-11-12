@@ -1,4 +1,4 @@
-toneGenerator
-=============
+Flex Tone Generator
+===================
 
-Tone generation in Flex
+Simple flex project that dynamically generates tones.

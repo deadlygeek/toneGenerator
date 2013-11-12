@@ -1,0 +1,133 @@
+<project name="BUILD SCRIPT" default="debug" basedir=".">
+    <!--
+
+     Load in custom local properties
+
+     -->
+    <property file="local.props" />
+    
+    <!-- 
+
+     Define the Flex SDK location and version 
+
+     -->
+    <property name="flex_SDK_version" value="flex_sdk_4.6.0" />
+    <property name="flex_bin" value="${flex_SDK_base}/${flex_SDK_version}/bin" />
+    <property name="mxmlc" value="${flex_bin}/mxmlc" />
+
+    <!-- 
+
+    Build output directories.  Make sure that these directories exist. Should be able to use alias if needed.
+
+    -->
+    <property name="debug_deploy_dir" value="${basedir}/bin_debug" />
+    <property name="release_deploy_dir" value="${basedir}/bin_release" />
+
+    <!-- 
+
+    Main Class
+
+    -->
+    <property name="main_class" value="ToneGeneratorView.mxml" />
+
+    <!-- 
+
+    Libraries
+
+    -->
+    <property name="mx" value="${flex_SDK_base}/${flex_SDK_version}/frameworks/libs/mx/" />
+    <property name="flex" value="${flex_SDK_base}/${flex_SDK_version}/frameworks/libs/" />
+    <property name="locale" value="${flex_SDK_base}/${flex_SDK_version}/frameworks/locale/en_US/" />
+
+    <property name="all_libs" value=" '${locale}' '${mx}' '${flex}'" />
+
+    <!-- 
+
+    General swf properties 
+
+    -->
+    <property name="output_file_name" value="toneGenerator.swf" />
+
+
+    <!--
+
+     Build options - default is 'debug'
+
+     -->
+    <target name="release" >
+        <antcall target="headerGraphic">
+            <param name="customHeaderMessage" value="RELEASE" />
+        </antcall>
+        <echo>
+            <![CDATA[
+
+            Thank you for choosing ANT for your build process.
+            ]]>
+        </echo>
+        <property name="debug" value="false" />
+        <property name="stacktrace" value="false" />
+        <property name="isOptimize" value="true" />
+        <property name="incremental" value="false" />
+        <property name="deploy_dir" value="${release_deploy_dir}" />
+        <antcall target="build" />
+    </target>
+
+    <target name="debug" >
+        <antcall target="headerGraphic">
+            <param name="customHeaderMessage" value="DEBUG" />
+        </antcall>
+        <echo>
+            <![CDATA[
+            Thank you for choosing ANT for your build process.
+            ]]>
+        </echo>
+        <property name="debug" value="true" />
+        <property name="stacktrace" value="true" />
+        <property name="isOptimize" value="false" />
+        <property name="incremental" value="false" />
+        <property name="deploy_dir" value="${debug_deploy_dir}" />
+        <antcall target="build" />
+    </target>
+
+    <target name="headerGraphic" >
+        <echo>
+            <![CDATA[
+ _______                _____                           _             
+|__   __|              / ____|                         | |            
+   | | ___  _ __   ___| |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __ 
+   | |/ _ \| '_ \ / _ \ | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
+   | | (_) | | | |  __/ |__| |  __/ | | |  __/ | | (_| | || (_) | |   
+   |_|\___/|_| |_|\___|\_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|  
+   ${customHeaderMessage}
+            ]]>
+        </echo>
+    </target>
+
+    <!--
+
+    Base build script.
+
+    This should not be triggered from the command line (i.e. ant build) as the default debug setting will not be set
+
+    -->
+    <target name="build">
+
+      <exec executable="${mxmlc}">
+          <arg line="-source-path '${source_path}/' -library-path ${all_libs}" />
+          <arg line="-allow-source-path-overlap=true" />
+          <arg line="-debug=${debug}" />
+          <arg line="-incremental=${incremental}" />
+          <arg line="-static-link-runtime-shared-libraries=true" />
+          <arg line="-verbose-stacktraces=${stacktrace}" />
+          <arg line="-optimize=${isOptimize}" />
+          <arg line="-show-actionscript-warnings=true" />
+          <arg line="-show-binding-warnings=true" />
+          <arg line="-show-deprecation-warnings=true" />
+          <arg line="-show-unused-type-selector-warnings=true" />
+          <arg line="-strict=true" />
+          <arg line="-use-network=false" />
+          <arg line="'${source_path}/${main_class}' -output '${deploy_dir}/${output_file_name}'" />
+      </exec>
+  </target>
+
+</project>
