@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="100%" minWidth="800" minHeight="600">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="100%" minWidth="1000" minHeight="800">
 
     <mx:Script>
         <![CDATA[
@@ -17,6 +17,23 @@
                     toneGenerator.stopTone();
                 }
             }
+
+            public function handleFreqInputBoxChange(e:Event):void {
+                var currentInBox:TextInput=TextInput(e.currentTarget);
+
+                if (freqLockCheck.selected) {
+                    toneGenerator.freq_left = toneGenerator.freq_right = Number(currentInBox.text);
+                    freqLeftSlider.value = freqRightSlider.value = Number(currentInBox.text);
+                } else {
+                    if (currentInBox.id == "leftFreqTextIn") {
+                        toneGenerator.freq_left = Number(currentInBox.text);
+                    } else if (currentInBox.id == "rightFreqTextIn") {
+                        toneGenerator.freq_right = Number(currentInBox.text);
+                    }
+                }
+
+            }
+
             public function handleFreqSliderChange(e:Event):void {
                 var currentSlider:Slider=Slider(e.currentTarget);
 
@@ -32,6 +49,7 @@
                 }
 
             }
+
             public function handleAmpSliderChange(e:Event):void {
                 var currentSlider:Slider=Slider(e.currentTarget);
 
@@ -47,6 +65,7 @@
                 }
 
             }
+
 
         ]]>
     </mx:Script>
@@ -81,11 +100,17 @@
 
                 <mx:VBox paddingBottom="10" paddingTop="10" paddingLeft="5" paddingRight="5" width="100%">
 
-                    <mx:Label text="LEFT FREQ: {toneGenerator.freq_left}" width="100%" textAlign="center" />
-                    <mx:HSlider id="freqLeftSlider" width="100%" minimum="10" maximum="2000" value="{toneGenerator.freq_left}" snapInterval="1" showDataTip="true" liveDragging="false" change="handleFreqSliderChange(event)" />
+                    <mx:HBox>
+                        <mx:Label text="LEFT FREQ:" width="100%" textAlign="center" />
+                        <mx:TextInput id="leftFreqTextIn" text="{toneGenerator.freq_left}" width="100%" textAlign="center" enter="handleFreqInputBoxChange(event)" />
+                    </mx:HBox>
+                    <mx:HSlider id="freqLeftSlider" width="100%" minimum="10" maximum="20000" value="{toneGenerator.freq_left}" snapInterval="1" showDataTip="true" change="handleFreqSliderChange(event)" />
 
-                    <mx:Label text="RIGHT FREQ: {toneGenerator.freq_right}" width="100%" textAlign="center" />
-                    <mx:HSlider id="freqRightSlider" width="100%" minimum="10" maximum="2000" value="{toneGenerator.freq_right}" snapInterval="1" showDataTip="true" liveDragging="false" change="handleFreqSliderChange(event)" />
+                    <mx:HBox>
+                        <mx:Label text="RIGHT FREQ:" width="100%" textAlign="center" />
+                        <mx:TextInput id="rightFreqTextIn" text="{toneGenerator.freq_right}" width="100%" textAlign="center" enter="handleFreqInputBoxChange(event)" />
+                    </mx:HBox>
+                    <mx:HSlider id="freqRightSlider" width="100%" minimum="10" maximum="20000" value="{toneGenerator.freq_right}" snapInterval="1" showDataTip="true" change="handleFreqSliderChange(event)" />
 
                 </mx:VBox>
 
